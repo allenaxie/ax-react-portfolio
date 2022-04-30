@@ -2,31 +2,17 @@ import React, {useState, useEffect} from 'react';
 import {motion} from 'framer-motion';
 import './About.scss';
 import { images } from '../../constants';
+import { urlFor, client } from '../../client';
 
 const About = () => {
+  const [abouts, setAbouts] = useState([]);
 
-  const abouts = [
-    {
-      title: 'Full stack developer',
-      description: 'Create full stack web applications with MERN stack',
-      imgUrl: images.about01,
-    },
-    {
-      title: 'Frontend Developer',
-      description: 'Specialize in creating responsive, user-friendly web applications using the latest technologies.',
-      imgUrl: images.about02,
-    },
-    {
-      title: 'Web3 developer',
-      description: 'Constantly learning web3 development.',
-      imgUrl: images.about03,
-    },
-    {
-      title: 'Web developer',
-      description: 'I am a great web developer.',
-      imgUrl: images.about04,
-    },
-  ]
+  useEffect(() => {
+    const query = '*[_type == "abouts"]';
+
+    client.fetch(query)
+      .then((data) => setAbouts(data));
+  },[])
 
   return (
     <>
@@ -47,9 +33,9 @@ const About = () => {
             className="app__profile-item"
             key={about.title + index}
           >
-            <img src={about.imgUrl} alt={about.title}/>
+            <img src={urlFor(about.imgUrl)} alt={about.title}/>
             <h2 className="bold-text" style={{marginTop: 20}}> {about.title} </h2>
-            <p className="bold-text" style={{marginTop: 10}}> {about.description} </p>
+            <p style={{marginTop: 10}}> {about.description} </p>
           </motion.div>
         ))}
       </div>
