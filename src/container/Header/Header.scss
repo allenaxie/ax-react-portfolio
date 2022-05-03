@@ -176,7 +176,7 @@
     position: relative;
 
     img {
-        width: 150%;
+        width: 180%;
         object-fit: contain;
         z-index: 1;
     }
@@ -193,5 +193,7 @@
 
     @media screen and (max-width: 1200px) {
         margin: 2rem 0;
+        width: 80%;
     }
+
 }
