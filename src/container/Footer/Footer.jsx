@@ -3,6 +3,7 @@ import './Footer.scss';
 import { images } from '../../constants';
 import { AppWrap, MotionWrap} from '../../wrapper';
 import {client} from '../../client';
+import {BsMailbox} from 'react-icons/bs';
 
 const Footer = () => {
   const [formData, setFormData] = useState({name:'', email: '', message: ''});
@@ -41,13 +42,14 @@ const Footer = () => {
 
       <div className="app__footer-cards">
         <div className='app__footer-card'>
-          <img src={images.email} alt="email"/>
+          {/* <img src={images.email} alt="email"/> */}
+          <BsMailbox/>
           <a href="mailto:allenaxie1@gmail.com" className='p-text'>allenaxie1@gmail.com</a>
         </div>
-        <div className='app__footer-card'>
+        {/* <div className='app__footer-card'>
           <img src={images.mobile} alt="mobile"/>
           <a href="tel: + 1 (123) 456-7890" className='p-text'>+ 1 (123) 456-7890</a>
-        </div>
+        </div> */}
       </div>
 
 {!isFormSubmitted ? 
