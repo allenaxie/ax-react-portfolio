@@ -1,50 +1,45 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './Footer.scss';
 import { images } from '../../constants';
-import { AppWrap, MotionWrap} from '../../wrapper';
-import {client} from '../../client';
-import {BsMailbox} from 'react-icons/bs';
+import { AppWrap, MotionWrap } from '../../wrapper';
+import { client } from '../../client';
+import { BsMailbox } from 'react-icons/bs';
+import { useForm } from '@formspree/react';
+import { Form, Input, Result } from 'antd';
 
 const Footer = () => {
-  const [formData, setFormData] = useState({name:'', email: '', message: ''});
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const { name, email, message } = formData; 
-
-  const handleChangeInput = (e) => {
-    const {name, value} = e.target;
-    // dynamically set form data to its corresponding value
-    setFormData({...formData, [name]: value});
+  const { TextArea } = Input;
+  const [state, handleSubmit] = useForm("xoqrdpkb");
+  if (state.succeeded) {
+    console.log('success')
+    return (
+      <Result
+        status="success"
+        title='Thanks for your message!'
+      />
+    );
   }
 
-  const handleSubmit = () => {
-    setLoading(true);
-
-    // based on sanity guidelines
-    const contact = {
-      _type: 'contact',
-      name: name,
-      email: email,
-      message: message,
+  const validateMessages = {
+    types: {
+      email: `is not a valid email!`
     }
-
-    client.create(contact)
-    .then(() => {
-      setLoading(false);
-      setIsFormSubmitted(true);
-    })
   }
 
   return (
     <>
-      <h2 className='head-text'> Chat with me </h2>
+      <h2 className='head-text'> Chat with <span className="app__footer-heading">me</span> </h2>
 
       <div className="app__footer-cards">
         <div className='app__footer-card'>
           {/* <img src={images.email} alt="email"/> */}
-          <BsMailbox/>
-          <a href="mailto:allenaxie1@gmail.com" className='p-text'>allenaxie1@gmail.com</a>
+          <BsMailbox />
+          <a href="mailto:allenaxie1@gmail.com" className='p-text'>
+            allenaxie1@gmail.com
+          </a>
         </div>
         {/* <div className='app__footer-card'>
           <img src={images.mobile} alt="mobile"/>
@@ -52,30 +47,49 @@ const Footer = () => {
         </div> */}
       </div>
 
-{!isFormSubmitted ? 
-      <div className='app__footer-form app__flex'>
-        <div className='app__flex'>
-          <input className='p-text' type="text" placeholder="Your Name" name="name" value={name} onChange={handleChangeInput}/>
-        </div>
-        <div className='app__flex'>
-          <input className='p-text' type="email" placeholder="Your Email" name="email" value={email} onChange={handleChangeInput}/>
-        </div>
-        <div>
-          <textarea
-            className='p-text'
-            placeholder='Your Message'
-            value={message}
-            name="message"
-            onChange={handleChangeInput}
-          />
-        </div>
-        <button type="button" className='p-text' onClick={handleSubmit}>{ loading ? 'Sending' : 'Send Message'}</button>
-      </div>
-      :
-      <div>
-        <h3 className='head-text'>Thank you for getting in touch!</h3>
-      </div>
-}
+      <Form
+        name='contact-form'
+        onFinish={handleSubmit}
+        className="app__footer-form"
+        wrapperCol={{
+          xs: { span: 24 },
+          md: {span: 20, offset: 2 },
+          lg: { span: 18, offset: 3},
+          xl: {span: 14, offset: 6},
+        }}
+        validateMessages={validateMessages}
+      >
+        <Form.Item
+          name="name"
+          rules={[{ required: true, message: 'Please input your name' }]}
+        >
+          <Input placeholder="Your name" />
+        </Form.Item>
+        <Form.Item
+          name="email"
+          rules={[
+            { required: true, message: "Please enter a valid email address", type: 'email' }]}
+        >
+          <Input placeholder="Your email" />
+        </Form.Item>
+        <Form.Item
+          name="message"
+          rules={[
+            { required: true, message: "Please enter your message" }]}
+        >
+          <TextArea rows={4} placeholder="Your message" />
+        </Form.Item>
+        <Form.Item
+          wrapperCol={{ 
+            xs: { span: 24, offset: 10 },
+            md: { span: 24, offset: 11 }
+          }}
+        >
+          <button type="submit" className='p-text'>
+            Send Message
+          </button>
+        </Form.Item>
+      </Form>
     </>
   )
 }

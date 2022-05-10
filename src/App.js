@@ -1,4 +1,5 @@
 import React from 'react';
+import 'antd/dist/antd.css';
 import { About, Footer, Header, Skills, Testimonial, Work} from './container';
 import { Navbar } from './components';
 import './App.scss';
